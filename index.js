@@ -40,6 +40,7 @@ async function run() {
 
     app.post('/jobs', async (req, res) => {
       const data = req.body;
+
       const result = await allJobs.insertOne(data)
       res.json(result)
     })
