@@ -9,6 +9,7 @@ const cors=require('cors');
 app.use(cors());
 app.use(express.json());
 
+//Checking if Ashim is connected or not;
 
 //<------------- Database Code Here ---------->
 
