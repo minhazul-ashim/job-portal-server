@@ -24,9 +24,16 @@ app.use(express.json());
  
         const database = client.db("Dev-Team-Job-Portal");
         const allJobs = database.collection("AllJobs");
+        const featuredEmployee=database.collection("Featured")
 
         
+        //<------------ Get Featured Employee ------------->
 
+        app.get('/allJobs',async(req,res)=>{
+          const getAllJobs=await allJobs.find({}).toArray();
+          res.send(getAllJobs)
+          console.log(getAllJobs);
+        }); 
 
 
 
