@@ -42,8 +42,16 @@ async function run() {
 
     app.post('/jobs', async (req, res) => {
 
+      const email = req.query.email
       const data = req.body;
+
       const result = await allJobs.insertOne(data)
+
+      const filter = { email: email }
+
+      const userJobPost = await users.updateOne(filter, {
+        $addToSet: { jobsPosted: data }
+      })
 
       res.json(result)
     })
@@ -66,14 +74,13 @@ async function run() {
 
     //API for getting a user's data;
 
-    app.get('/users', async (req, res) => {
+    app.get('/user', async (req, res) => {
 
       const email = req.query.email;
 
       const result = await users.findOne({ email: email })
-
       res.json(result)
-      
+
     })
   } finally {
     // await client.close();
