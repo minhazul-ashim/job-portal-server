@@ -1,10 +1,10 @@
-const express=require('express');
+const express = require('express');
 const { MongoClient } = require('mongodb');
-const ObjectId=require('mongodb').ObjectId;
+const ObjectId = require('mongodb').ObjectId;
 require('dotenv').config();
-const app=express();
-const port=process.env.PORT || 5000;
-const cors=require('cors');
+const app = express();
+const port = process.env.PORT || 5000;
+const cors = require('cors');
 
 app.use(cors());
 app.use(express.json());
@@ -13,44 +13,44 @@ app.use(express.json());
 
 //<------------- Database Code Here ---------->
 
-  const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.pxp8q.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.pxp8q.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 
-  const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-    
-    async function run() {
-      try {
-        await client.connect();
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-        //<------------Database All Collection ------------->
- 
-        const database = client.db("Dev-Team-Job-Portal");
-        const allJobs = database.collection("AllJobs");
-        const featuredEmployee=database.collection("Featured")
+async function run() {
+  try {
+    await client.connect();
 
-        
-        //<------------ Get Featured Employee ------------->
+    //<------------Database All Collection ------------->
 
-        app.get('/allJobs',async(req,res)=>{
-          const getAllJobs=await allJobs.find({}).toArray();
-          res.send(getAllJobs)
-          console.log(getAllJobs);
-        }); 
+    const database = client.db("Dev-Team-Job-Portal");
+    const allJobs = database.collection("AllJobs");
+    const featuredEmployee = database.collection("Featured")
 
 
+    //<------------ Get Featured Employee ------------->
 
+    app.get('/jobs', async (req, res) => {
 
+      const getAllJobs = await allJobs.find({}).toArray();
 
-      } finally {
-        // await client.close();
-      }
-    }
-    run().catch(console.dir);
-    
-    app.get('/',(req,res)=>{
-      res.send('Running Dev-Team-Job-Portal')
+      res.send(getAllJobs)
     });
 
 
-app.listen(port,()=>{
-    console.log("Running Server Port is",port);
+    
+
+  } finally {
+    // await client.close();
+  }
+}
+run().catch(console.dir);
+
+app.get('/', (req, res) => {
+  res.send('Running Dev-Team-Job-Portal')
+});
+
+
+app.listen(port, () => {
+  console.log("Running Server Port is", port);
 });
