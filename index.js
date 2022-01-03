@@ -25,7 +25,8 @@ async function run() {
 
     const database = client.db("Dev-Team-Job-Portal");
     const allJobs = database.collection("AllJobs");
-    const featuredEmployee = database.collection("Featured")
+    const featuredEmployee = database.collection("Featured");
+    const users = database.collection('Users')
 
 
     //<------------ Get Featured Employee ------------->
@@ -37,8 +38,43 @@ async function run() {
       res.send(getAllJobs)
     });
 
+    //API for posting a job to the jobs;
 
+    app.post('/jobs', async (req, res) => {
+
+      const data = req.body;
+      const result = await allJobs.insertOne(data)
+
+      res.json(result)
+    })
+
+    //API for storing a users data when registered for the first time;
+
+    app.put('/users', async (req, res) => {
+
+      const { email, displayName } = req.body;
+      const filter = { email: email }
+      const doc = {
+        $set: { email: email, name: displayName }
+      }
+      const option = { upsert: true }
+
+      const result = await users.updateOne(filter, doc, option)
+
+      res.json(result)
+    })
+
+    //API for getting a user's data;
     
+    app.get('/users', async (req, res) => {
+
+      const email = req.query.email;
+
+      const result = await users.findOne({ email: email })
+
+      res.json(result)
+    })
+
 
   } finally {
     // await client.close();
