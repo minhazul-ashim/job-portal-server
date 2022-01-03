@@ -65,7 +65,7 @@ async function run() {
     })
 
     //API for getting a user's data;
-    
+
     app.get('/users', async (req, res) => {
 
       const email = req.query.email;
@@ -73,9 +73,8 @@ async function run() {
       const result = await users.findOne({ email: email })
 
       res.json(result)
+      
     })
-
-
   } finally {
     // await client.close();
   }
