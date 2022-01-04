@@ -25,7 +25,7 @@ async function run() {
 
     const database = client.db("Dev-Team-Job-Portal");
     const allJobs = database.collection("AllJobs");
-    const featuredEmployee = database.collection("Featured");
+    // const featuredEmployee = database.collection("Featured");
     const users = database.collection('Users')
 
 
@@ -43,7 +43,16 @@ async function run() {
 
       const result = await allJobs.insertOne(data)
       res.json(result)
-    })
+    });
+
+     //<------------ Get Single job Information ------------->
+
+     app.get('/jobDetails/:id',async(req,res)=>{
+      const id=req.params.id;
+      const query={_id:ObjectId(id)};
+      const showDetails=await allJobs.findOne(query);
+      res.json(showDetails);          
+    });
 
     //API for storing a users data when registered for the first time;
 
