@@ -50,11 +50,11 @@ async function run() {
     app.get('/browseJobs', async (req, res) => {
       const search = req.query.search;
       if(search) {
-        const searchResult = await browseJobs.filter(browseJob => browseJob.title.toLowerCase().includes(search));
-        console.log(searchResult);
+        const searchResult = await browseJobs.filter(browseJob => browseJob.title.toLocaleLowerCase().includes(search));
+        res.send(searchResult);
       }
       else {
-        console.log(browseJobs)
+        res.send(browseJobs)
       }
     });
 
