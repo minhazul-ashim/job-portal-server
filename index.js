@@ -29,19 +29,24 @@ async function run() {
     const allJobs = database.collection("AllJobs");
     // const featuredEmployee = database.collection("Featured");
     const users = database.collection('Users')
-    const blogs=database.collection("Blogs");
+    const blogs = database.collection("Blogs");
 
 
     //<------------ Get All Jobs ------------->
 
     app.get('/browseJobs', async (req, res) => {
+
       const getAllJobs = await allJobs.find({}).toArray();
+
       res.send(getAllJobs)
     });
+
     //<------------ Get All Blogs ------------->
 
     app.get('/blogs', async (req, res) => {
+
       const getBlogs = await blogs.find({}).toArray();
+
       res.send(getBlogs)
     });
 
@@ -49,7 +54,7 @@ async function run() {
 
     app.get('/browseJobs', async (req, res) => {
       const search = req.query.search;
-      if(search) {
+      if (search) {
         const searchResult = await browseJobs.filter(browseJob => browseJob.title.toLowerCase().includes(search));
         console.log(searchResult);
       }
@@ -61,9 +66,17 @@ async function run() {
     //API for posting a job to the jobs;
 
     app.post('/jobs', async (req, res) => {
+
       const data = req.body;
 
+      const email = req.query.email;
+
+      const postedUser = await users.updateOne({ email: email }, {
+        $addToSet: { postedJobs: data }
+      })
+
       const result = await allJobs.insertOne(data)
+      
       res.json(result)
     });
 
@@ -97,8 +110,8 @@ async function run() {
       res.json(result)
     })
 
+    //API for posting a candidates information in a job and to their profiles;
 
-    //API for posting a candidates information in a job;
     app.post('/jobs/application', async (req, res) => {
 
       const doc = { information: req.body, resume: req.files }
