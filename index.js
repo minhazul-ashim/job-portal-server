@@ -59,7 +59,7 @@ async function run() {
         console.log(searchResult);
       }
       else {
-        console.log(browseJobs)
+        res.send(browseJobs)
       }
     });
 
@@ -76,7 +76,7 @@ async function run() {
       })
 
       const result = await allJobs.insertOne(data)
-      
+
       res.json(result)
     });
 
