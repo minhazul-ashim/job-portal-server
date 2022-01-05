@@ -5,9 +5,11 @@ require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 5000;
 const cors = require('cors');
+const files = require('express-fileupload')
 
 app.use(cors());
 app.use(express.json());
+app.use(files())
 
 //Checking if Ashim is connected or not;
 
@@ -45,13 +47,13 @@ async function run() {
       res.json(result)
     });
 
-     //<------------ Get Single job Information ------------->
+    //<------------ Get Single job Information ------------->
 
-     app.get('/jobDetails/:id',async(req,res)=>{
-      const id=req.params.id;
-      const query={_id:ObjectId(id)};
-      const showDetails=await allJobs.findOne(query);
-      res.json(showDetails);          
+    app.get('/jobDetails/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const showDetails = await allJobs.findOne(query);
+      res.json(showDetails);
     });
 
     //API for storing a users data when registered for the first time;
@@ -74,6 +76,34 @@ async function run() {
       const result = await users.findOne({ email: email })
       res.json(result)
     })
+
+
+    //API for posting a candidates information in a job;
+    app.post('/jobs/application', async (req, res) => {
+
+      const doc = { information: req.body, resume: req.files }
+
+      const id = req.query.id
+
+      const email = req.query.email
+
+      const filterJob = { _id: ObjectId(id) }
+
+      const filterUser = { email: email }
+
+      const findJob = await allJobs.findOne(filterJob)
+
+      const postInJobs = await allJobs.updateOne(filterJob, {
+        $addToSet: { candidates: doc }
+      })
+
+      const postInUser = await users.updateOne(filterUser, {
+        $addToSet: { appliedJobs: findJob }
+      })
+
+      res.json(postInJobs)
+    })
+
   } finally {
     // await client.close();
   }
