@@ -29,6 +29,7 @@ async function run() {
     const allJobs = database.collection("AllJobs");
     // const featuredEmployee = database.collection("Featured");
     const users = database.collection('Users')
+    const blogs=database.collection("Blogs");
 
 
     //<------------ Get All Jobs ------------->
@@ -36,6 +37,25 @@ async function run() {
     app.get('/browseJobs', async (req, res) => {
       const getAllJobs = await allJobs.find({}).toArray();
       res.send(getAllJobs)
+    });
+    //<------------ Get All Blogs ------------->
+
+    app.get('/blogs', async (req, res) => {
+      const getBlogs = await blogs.find({}).toArray();
+      res.send(getBlogs)
+    });
+
+    // search option implement
+
+    app.get('/browseJobs', async (req, res) => {
+      const search = req.query.search;
+      if(search) {
+        const searchResult = await browseJobs.filter(browseJob => browseJob.title.toLowerCase().includes(search));
+        console.log(searchResult);
+      }
+      else {
+        console.log(browseJobs)
+      }
     });
 
     //API for posting a job to the jobs;
