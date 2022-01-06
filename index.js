@@ -15,7 +15,7 @@ app.use(files())
 
 //<------------- Database Code Here ---------->
 
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.pxp8q.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ptzya.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -25,7 +25,7 @@ async function run() {
 
     //<------------Database All Collection ------------->
 
-    const database = client.db("Dev-Team-Job-Portal");
+    const database = client.db("jobPortal");
     const allJobs = database.collection("AllJobs");
     // const featuredEmployee = database.collection("Featured");
     const users = database.collection('Users')
@@ -53,7 +53,7 @@ async function run() {
     // search option implement
 
     app.get('/browseJobs', async (req, res) => {
-      
+
       const search = req.query.search;
 
       if (search) {
