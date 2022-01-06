@@ -153,6 +153,22 @@ async function run() {
       res.json(result)
     })
 
+    app.delete('/user/bookmark', async (req, res) => {
+
+      const email = req.query.email;
+
+      const data = req.body;
+
+      console.log(email)
+      console.log(data)
+
+      const result = await users.updateOne({ email: email }, {
+        $pull: { bookmarked: data }
+      })
+
+      res.json(result)
+    })
+
   } finally {
     // await client.close();
   }
