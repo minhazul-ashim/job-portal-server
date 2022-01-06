@@ -140,6 +140,19 @@ async function run() {
       res.json(postInJobs)
     })
 
+    app.put('/user/bookmark', async (req, res) => {
+
+      const email = req.query.email;
+
+      const data = req.body;
+
+      const result = await users.updateOne({ email: email }, {
+        $addToSet: { bookmarked: data }
+      })
+
+      res.json(result)
+    })
+
   } finally {
     // await client.close();
   }
