@@ -140,6 +140,8 @@ async function run() {
       res.json(postInJobs)
     })
 
+    //API for adding bookmarks to the users data;
+
     app.put('/user/bookmark', async (req, res) => {
 
       const email = req.query.email;
@@ -152,6 +154,8 @@ async function run() {
 
       res.json(result)
     })
+
+    //API for deleting a bookmark in the users data;
 
     app.delete('/user/bookmark', async (req, res) => {
 
@@ -167,6 +171,22 @@ async function run() {
       })
 
       res.json(result)
+    })
+
+    //API for deleting a job from both user's data and the all jobs collection
+
+    app.delete('/jobs', async (req, res) => {
+
+      const email = req.query.email;
+      const data = req.body;
+
+      const deleteFromJobs = await allJobs.deleteOne(data)
+
+      const deleteFromUser = await users.updateOne({ email: email }, {
+        $pull: { postedJobs: data }
+      })
+
+      res.json(deleteFromJobs)
     })
 
   } finally {
