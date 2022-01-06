@@ -53,8 +53,11 @@ async function run() {
     // search option implement
 
     app.get('/browseJobs', async (req, res) => {
+      
       const search = req.query.search;
+
       if (search) {
+
         const searchResult = await browseJobs.filter(browseJob => browseJob.title.toLowerCase().includes(search));
         console.log(searchResult);
       }
